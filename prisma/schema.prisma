@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  accessLevelId Int      @map("access_level_id")
+  username      String   @map("username")
+  email         String   @map("email")
+  password      String   @map("password")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  deletedAt     DateTime @map("delete_at")
+
+  accessLevel AccessLevel @relation(fields: [accessLevelId], references: [id])
+
+  @@map("user")
+}
+
+model AccessLevel {
+  id              Int      @id @default(autoincrement())
+  level           Int      @map("level")
+  description     String   @map("description")
+  textDescription String?  @map("text_description")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  deletedAt       DateTime @map("delete_at")
+  User            User[]
+
+  @@map("Access_level")
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  name      String   @map("name")
+  phone     String?  @map("phone")
+  address   String?  @map("address")
+  createdAt DateTime @default(now()) @map("created_at")
+  updateAt  DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime @map("delete_at")
+
+  @@map("client")
+}
